@@ -77,5 +77,13 @@ public class UserServices implements IUserServices{
 		return users;
 	}
 
+	public void addHobby(Hobby hobby) throws SQLException {
+		userDAO.addHobby(hobby);
+	}
+
+	public void removeHobby(Hobby hobby) throws SQLException {
+		userDAO.removeHobby(hobby);
+	}
+
 
 }

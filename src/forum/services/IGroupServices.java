@@ -42,4 +42,5 @@ public interface IGroupServices {
 
 	public void sendMessageGroup(Message message, Groupe groupe);
 
+
 }

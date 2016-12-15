@@ -29,4 +29,8 @@ public interface IUserDAO {
 
 	public ArrayList<User> getOtherUser();
 
+	public void addHobby(Hobby hobby) throws SQLException;
+
+	public void removeHobby(Hobby hobby) throws SQLException;
+
 }

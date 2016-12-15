@@ -3,6 +3,7 @@ package forum.action;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import forum.action.LogAction;
 import forum.bean.data.Groupe;
 import forum.bean.data.Hobby;
 import forum.bean.data.User;
@@ -78,5 +79,13 @@ public class UserAction {
 		ArrayList<User> users = new ArrayList<User>();
 		users = userServices.getOtherUser();
 		return users;
+	}
+	
+	public void addHobby(Hobby hobby) throws SQLException{
+		userServices.addHobby(hobby);
+	}
+	
+	public void removeHobby(Hobby hobby) throws SQLException{
+		userServices.removeHobby(hobby);
 	}
 }

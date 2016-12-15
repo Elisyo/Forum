@@ -114,6 +114,7 @@ public class GroupAction {
 	public void sendMessageGroup(Message message, Groupe groupe){
 		groupServices.sendMessageGroup(message, groupe);
 	}
+	
 
 	public boolean nameOfGroupIsGood(String name) {
 

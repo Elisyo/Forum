@@ -387,4 +387,52 @@ public class UserDAO implements IUserDAO {
 
 		return listUser;
 	}
+
+	public void addHobby(Hobby hobby) throws SQLException {
+		PreparedStatement preparedStatement = null;
+		final String requete = "INSERT INTO `deleplanque`.`hobbiesUser` (`nameAccount`, `idHobby`) VALUES (?, ?);";
+		try {
+			preparedStatement = con.prepareStatement(requete);
+
+			preparedStatement.setString(1, LogAction.getInstance().currentUser.getNomCompte());
+			preparedStatement.setInt(2, hobby.getId());
+
+			preparedStatement.executeUpdate();
+
+			
+		} catch (final SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (final SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			preparedStatement.close();
+		}				
+	}
+
+	public void removeHobby(Hobby hobby) throws SQLException {
+		PreparedStatement preparedStatement = null;
+		final String requete = "DELETE FROM `hobbiesUser` WHERE `idHobby` = ? and `nameAccount` = ?";
+		try {
+			preparedStatement = con.prepareStatement(requete);
+
+			preparedStatement.setInt(1, hobby.getId());
+			preparedStatement.setString(2, LogAction.getInstance().currentUser.getNomCompte());
+
+			preparedStatement.executeUpdate();
+
+			
+		} catch (final SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (final SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			preparedStatement.close();
+		}
+	}
 }
