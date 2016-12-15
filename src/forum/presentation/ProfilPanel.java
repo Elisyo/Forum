@@ -22,14 +22,21 @@ import forum.action.HobbyAction;
 import forum.action.UserAction;
 import forum.bean.data.Hobby;
 import forum.bean.data.User;
+import forum.persistance.dao.UnitOfWork;
 
 public class ProfilPanel extends JPanel implements ListSelectionListener{
 	
 	private User u;
-	ArrayList<Hobby> hobbiesAction = HobbyAction.getInstance().getOtherHobbies();
+	ArrayList<Hobby> hobbiesAction = new ArrayList<Hobby>();
 	
 	private Hobby hobbySelected;
 	private boolean boolHobbySelected = false;
+	
+	JPanel Hobbies = new JPanel();
+	JPanel UserHobbies = new JPanel();
+	JPanel AllHobbies = new JPanel();
+	
+	ArrayList<Hobby> hobbiesList = new ArrayList<Hobby>();
 	
 	JList<Hobby> hobbies = new JList<Hobby>();
 	DefaultListModel<Hobby> lmodel = new DefaultListModel<Hobby>();
@@ -46,18 +53,31 @@ public class ProfilPanel extends JPanel implements ListSelectionListener{
 		GridLayout gl = new GridLayout(2, 1);
 		this.setLayout(gl);
 		this.add(infos());
-		this.add(hobbies());
+		Hobbies = hobbies();
+		this.add(Hobbies);
 	}
 	
 	private void lmodel(){
 		lmodel.clear();
-		for (int i = 0; i < u.getHobbies().size(); i++) {
-			lmodel.addElement(u.getHobbies().get(i));
+		
+		try {
+			hobbiesList = UserAction.getInstance().getListHobbiesOfUser(u);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		
+		for (int i = 0; i < hobbiesList.size(); i++) {
+			lmodel.addElement(hobbiesList.get(i));
+		}
+		
+		System.out.println(hobbiesList.size());
 	}
 	
 	private void l2model() {
 		l2model.clear();
+		
+		hobbiesAction = HobbyAction.getInstance().getOtherHobbies();
+		
 		for (int i = 0; i < hobbiesAction.size(); i++) {
 			l2model.addElement(hobbiesAction.get(i));
 		}
@@ -80,7 +100,7 @@ public class ProfilPanel extends JPanel implements ListSelectionListener{
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Sauvegarder un user");
-				UserAction.getInstance();
+				UnitOfWork.getInstance().commit();
 			}
 		});
 		result.add(save);
@@ -91,8 +111,10 @@ public class ProfilPanel extends JPanel implements ListSelectionListener{
 		JPanel result = new JPanel();
 		GridLayout gl = new GridLayout(1, 2);
 		result.setLayout(gl);
-		result.add(userHobbies());
-		result.add(allHobbies());
+		UserHobbies = userHobbies();
+		result.add(UserHobbies);
+		AllHobbies = allHobbies();
+		result.add(AllHobbies);
 		
 		return result;
 	}
@@ -101,7 +123,6 @@ public class ProfilPanel extends JPanel implements ListSelectionListener{
 		JPanel jpanel = new JPanel();
 		if (u.getHobbies().size() > 0) {			
 			hobbies.setModel(lmodel);
-			// il faut changer ce addListSelectionListener(null)
 			hobbies.getSelectionModel().addListSelectionListener(this);
 			hobbies.setPreferredSize(new Dimension(150, 300));
 			JScrollPane js = new JScrollPane();
@@ -113,7 +134,18 @@ public class ProfilPanel extends JPanel implements ListSelectionListener{
 					if(hobbySelected!=null && boolHobbySelected==true){
 						System.out.println("Supprimer un hobby au user : " + hobbySelected.getNom());
 						try {
-							HobbyAction.getInstance().removeHobby(hobbySelected);
+							UserAction.getInstance().removeHobby(hobbySelected);
+							lmodel();
+							l2model();
+							Hobbies.remove(UserHobbies);
+							Hobbies.remove(AllHobbies);
+							UserHobbies = userHobbies();
+							AllHobbies = allHobbies();
+							Hobbies.add(UserHobbies);
+							Hobbies.add(AllHobbies);
+							Hobbies.repaint();
+							Hobbies.revalidate();
+							
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
@@ -148,7 +180,21 @@ public class ProfilPanel extends JPanel implements ListSelectionListener{
 				public void actionPerformed(ActionEvent e) {
 					if(hobbySelected!=null && boolHobbySelected==false){
 						System.out.println("Ajouter un hobby au user : " + hobbySelected.getNom());
-						hobbySelected=null;
+						try {
+							UserAction.getInstance().addHobby(hobbySelected);
+							lmodel();
+							l2model();
+							Hobbies.remove(UserHobbies);
+							Hobbies.remove(AllHobbies);
+							UserHobbies = userHobbies();
+							AllHobbies = allHobbies();
+							Hobbies.add(UserHobbies);
+							Hobbies.add(AllHobbies);
+							Hobbies.repaint();
+							Hobbies.revalidate();
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			});

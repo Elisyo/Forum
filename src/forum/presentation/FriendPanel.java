@@ -22,6 +22,11 @@ import forum.bean.data.User;
 public class FriendPanel extends JPanel implements ListSelectionListener{
 
 	User u;
+	
+	JPanel ManageFriends = new JPanel();
+	JPanel Friends = new JPanel();
+	JPanel OtherUsers = new JPanel();
+	
 	ArrayList<User> friendsList = new ArrayList<User>();
 	JList<User> friends = new JList<User>();
 	DefaultListModel<User> lmodel = new DefaultListModel<User>();
@@ -37,7 +42,8 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 		
 		GridLayout gl = new GridLayout(2, 1);
 		this.setLayout(gl);
-		this.add(manageFriends());
+		ManageFriends = manageFriends();
+		this.add(ManageFriends);
 		this.add(notif());
 	}
 	
@@ -50,7 +56,6 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 				lmodel.addElement(friendsList.get(i));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -64,7 +69,6 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 				l2model.addElement(usersList.get(i));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -74,9 +78,10 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 		
 		GridLayout gl = new GridLayout(1, 2);
 		result.setLayout(gl);
-		
-		result.add(friends());
-		result.add(otherUsers());
+		Friends = friends();
+		result.add(Friends);
+		OtherUsers = otherUsers();
+		result.add(OtherUsers);
 		
 		return result;
 	}
@@ -91,7 +96,6 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 		
 		if (friendsList.size() > 0) {			
 			friends.setModel(lmodel);
-			// il faut changer ce addListSelectionListener(null)
 			friends.getSelectionModel().addListSelectionListener(this);
 			friends.setPreferredSize(new Dimension(150, 300));
 			JScrollPane js = new JScrollPane();

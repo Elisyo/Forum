@@ -35,7 +35,7 @@ public class UserServices implements IUserServices{
 
 	public ArrayList<Hobby> getListHobbiesOfUser(User user) throws SQLException {
 		ArrayList<Hobby> listHobbiesOfUser = new ArrayList<Hobby>();
-		listHobbiesOfUser = userDAO.getHobbiesListOfUser(user.getNom());
+		listHobbiesOfUser = userDAO.getHobbiesListOfUser(user.getNomCompte());
 		return listHobbiesOfUser;
 	}
 

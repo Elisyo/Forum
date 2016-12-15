@@ -101,7 +101,11 @@ public class GroupPanel extends JPanel implements ListSelectionListener{
 					othersUsersList.add(allUsersList.get(j));
 				}
 			}
-			for (int i = 0; i < usersList.size(); i++) {
+			
+			
+			//othersUsersList = GroupAction.getInstance().getFreeUserForGroup(groupSelected);
+			
+			for (int i = 0; i < othersUsersList.size(); i++) {
 				l3model.addElement(othersUsersList.get(i));
 			}
 		} catch (SQLException e) {
