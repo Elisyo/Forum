@@ -128,7 +128,7 @@ public class GroupServices implements IGroupServices{
 		}
 	}
 
-	public ArrayList<User> getFreeUserForGroup(Groupe groupe) {
+	public ArrayList<User> getFreeUserForGroup(Groupe groupe) throws SQLException {
 		ArrayList<User> listUsers = new ArrayList<User>();
 		listUsers = groupDAO.getFreeUserForGroup(groupe);
 		return listUsers;

@@ -116,7 +116,7 @@ public class GroupAction {
 	}
 	
 	
-	public ArrayList<User> getFreeUserForGroup(Groupe groupe){
+	public ArrayList<User> getFreeUserForGroup(Groupe groupe) throws SQLException{
 		ArrayList<User> listUsers = new ArrayList<User>();
 		listUsers = groupServices.getFreeUserForGroup(groupe);
 		return listUsers;

@@ -66,12 +66,17 @@ public class GroupPanel extends JPanel implements ListSelectionListener{
 	private void lmodel(){
 		lmodel.clear();
 		try {
-			groupsList=UserAction.getInstance().getListGroupOfUser(u);
-			for (int i = 0; i < groupsList.size(); i++) {
-				lmodel.addElement(groupsList.get(i));
+			
+			if(u.getRole().equals("admin")){
+				groupsList=GroupAction.getInstance().getListGroupe();
+			}else{
+				groupsList=UserAction.getInstance().getListGroupOfUser(u);
+			}
+			
+			for(int i=0;i<groupsList.size();i++){
+				lmodel.addElement(groupsList.get(i));		
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -90,20 +95,8 @@ public class GroupPanel extends JPanel implements ListSelectionListener{
 	
 	private void l3model(){
 		l3model.clear();
-		try {
-			ArrayList<User> allUsersList = new ArrayList<User>();
-			allUsersList=UserAction.getInstance().getAllUser();
-			
-			ArrayList<User> currentUsersList = new ArrayList<User>();
-			currentUsersList=GroupAction.getInstance().getListUserOfGroupById(groupSelected.getIdGroupe());
-			for(int j=0; j<allUsersList.size();j++){
-				if(!currentUsersList.contains(allUsersList.get(j))){
-					othersUsersList.add(allUsersList.get(j));
-				}
-			}
-			
-			
-			//othersUsersList = GroupAction.getInstance().getFreeUserForGroup(groupSelected);
+		try {			
+			othersUsersList = GroupAction.getInstance().getFreeUserForGroup(groupSelected);
 			
 			for (int i = 0; i < othersUsersList.size(); i++) {
 				l3model.addElement(othersUsersList.get(i));
@@ -227,7 +220,6 @@ public class GroupPanel extends JPanel implements ListSelectionListener{
 		
 		if (usersList.size() > 0) {			
 			users.setModel(l2model);
-			// il faut changer ce addListSelectionListener(null)
 			users.getSelectionModel().addListSelectionListener(this);
 			users.setPreferredSize(new Dimension(150, 300));
 			JScrollPane js = new JScrollPane();
@@ -237,7 +229,6 @@ public class GroupPanel extends JPanel implements ListSelectionListener{
 			add.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("Supprimer un participant");
-					// refresh les listes
 					try {
 						System.out.println(userSelected + " : " + groupSelected);
 						if(boolUserSelected==true){
@@ -277,7 +268,6 @@ public class GroupPanel extends JPanel implements ListSelectionListener{
 		
 		if (othersUsersList.size() > 0) {			
 			othersUsers.setModel(l3model);
-			// il faut changer ce addListSelectionListener(null)
 			othersUsers.getSelectionModel().addListSelectionListener(this);
 			othersUsers.setPreferredSize(new Dimension(150, 300));
 			JScrollPane js = new JScrollPane();
@@ -287,7 +277,6 @@ public class GroupPanel extends JPanel implements ListSelectionListener{
 			add.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("Ajouter un participant");
-					// refresh les listes
 					try {
 						System.out.println(userSelected + " : " + groupSelected);
 						if(boolUserSelected==false){
