@@ -133,9 +133,17 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws SQLException {
+		new ConnectionFrame();
+		
+		/* Usage Unit of Work
+		 * 
+		User user = UserAction.getInstance().getUserByName("dylan");
+		user.setNom("test");
+		UnitOfWork.getInstance().commit();
+		*/
+		
 		//logAction.inscription("test1", "test@test1.fr", "vermelles1", "vermelles1", "dele", "dyle");
 		//LogAction.getInstance().connexion("test1", "vermelles1");
-		new ConnectionFrame();
 		//listCategorie();
 		//listGroup();
 		//listHobby();
