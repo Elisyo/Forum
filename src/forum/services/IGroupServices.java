@@ -42,5 +42,7 @@ public interface IGroupServices {
 
 	public void sendMessageGroup(Message message, Groupe groupe);
 
+	public ArrayList<User> getFreeUserForGroup(Groupe groupe);
+
 
 }

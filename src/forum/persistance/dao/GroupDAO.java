@@ -483,5 +483,40 @@ public class GroupDAO implements IGroupDAO{
 		System.out.println(message.getContenue());
 	}
 
+	public ArrayList<User> getFreeUserForGroup(Groupe groupe) {
+		
+		ArrayList<User> listFriends = new ArrayList<User>();
+
+		PreparedStatement preparedStatement = null;
+		final String requete = "select user2 from friend where user1 = ?";
+		try {
+			preparedStatement = con.prepareStatement(requete);
+
+			preparedStatement.setString(1, name);
+
+			ResultSet resultat = preparedStatement.executeQuery();
+
+			while (resultat.next()) {
+				
+				UserProxy userProxy = new UserProxy(resultat.getString(1));
+				userProxy.add(UnitOfWork.getInstance());
+				listFriends.add(userProxy);
+			
+			}
+		} catch (final SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (final SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			preparedStatement.close();
+		}
+
+		return listFriends;
+		
+	}
+
 
 }

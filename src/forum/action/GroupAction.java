@@ -115,6 +115,12 @@ public class GroupAction {
 		groupServices.sendMessageGroup(message, groupe);
 	}
 	
+	
+	public ArrayList<User> getFreeUserForGroup(Groupe groupe){
+		ArrayList<User> listUsers = new ArrayList<User>();
+		listUsers = groupServices.getFreeUserForGroup(groupe);
+		return listUsers;
+	}
 
 	public boolean nameOfGroupIsGood(String name) {
 

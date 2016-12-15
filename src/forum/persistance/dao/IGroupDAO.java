@@ -42,4 +42,6 @@ public interface IGroupDAO {
 
 	public void sendMessageGroup(Message message, Groupe groupe);
 
+	public void getFreeUserForGroup(Groupe groupe);
+
 }
