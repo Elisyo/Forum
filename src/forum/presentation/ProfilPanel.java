@@ -90,17 +90,34 @@ public class ProfilPanel extends JPanel implements ListSelectionListener{
 		JPanel jp = new JPanel();
 		GridLayout gl = new GridLayout(5, 2);
 		jp.setLayout(gl);
-		jp.add(new JLabel("Prenom : "));jp.add(new JTextField(u.getPrenom()));
-		jp.add(new JLabel("Nom : "));jp.add(new JTextField(u.getNom()));
-		jp.add(new JLabel("Mail : "));jp.add(new JTextField(u.getMail()));
-		jp.add(new JLabel("Mot de passe : "));jp.add(new JPasswordField());
-		jp.add(new JLabel("Confirmer le mdp : "));jp.add(new JPasswordField());
+		jp.add(new JLabel("Prenom : "));
+		final JTextField prenom = new JTextField(u.getPrenom());
+		jp.add(new JTextField(u.getPrenom()));
+		jp.add(new JLabel("Nom : "));
+		final JTextField nom = new JTextField(u.getNom());
+		jp.add(new JTextField(u.getNom()));
+		jp.add(new JLabel("Mail : "));
+		final JTextField mail = new JTextField(u.getMail());
+		jp.add(new JTextField(u.getMail()));
+		jp.add(new JLabel("Mot de passe : "));
+		final JPasswordField mdp = new JPasswordField(u.getPassword());
+		jp.add(mdp);
+		final JPasswordField cmdp = new JPasswordField(u.getPassword());
+		jp.add(new JLabel("Confirmer le mdp : "));
+		jp.add(cmdp);
 		result.add(jp);
 		JButton save = new JButton("Sauvegarder");
+		System.out.println("u.getPassword : "+u.getPassword());
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Sauvegarder un user");
-				UnitOfWork.getInstance().commit();
+				if(mdp.getText().equals(cmdp.getText())){
+					System.out.println("Sauvegarder un user");
+					u.setPrenom(prenom.getText());
+					u.setNom(nom.getText());
+					u.setMail(mail.getText());
+					u.setPassword(mdp.getText());
+					UnitOfWork.getInstance().commit();
+				}
 			}
 		});
 		result.add(save);

@@ -123,7 +123,7 @@ public class UserDAO implements IUserDAO {
 				while (resultat.next()) {
 					ListeFriendsOfUserProxy listFriends = new ListeFriendsOfUserProxy(name); 
 					ListeHobbiesOfUserProxy listHobbies = new ListeHobbiesOfUserProxy(name);
-					user = new User(resultat.getString(1), resultat.getString(2), resultat.getString(4), resultat.getString(5), resultat.getString(6), listHobbies, listFriends);
+					user = new User(resultat.getString(1), resultat.getString(2), resultat.getString(3), resultat.getString(4), resultat.getString(5),resultat.getString(6), listHobbies, listFriends);
 					user.add(UnitOfWork.getInstance());
 				}
 			} catch (final SQLException e) {
@@ -217,7 +217,7 @@ public class UserDAO implements IUserDAO {
 	
 	public void updateUser(User user) throws SQLException{
 		PreparedStatement preparedStatement = null;
-		final String requete = "UPDATE `deleplanque`.`user` SET `mail` = ?, `lastname` = ?, `firstname` = ?, `role` = ? WHERE `user`.`nameAccount` = ?";
+		final String requete = "UPDATE `deleplanque`.`user` SET `mail` = ?, `lastname` = ?, `firstname` = ?, `role` = ?, `password` = ? WHERE `user`.`nameAccount` = ?";
 		try {
 			preparedStatement = con.prepareStatement(requete);
 
@@ -226,7 +226,8 @@ public class UserDAO implements IUserDAO {
 			preparedStatement.setString(2, user.getNom());
 			preparedStatement.setString(3, user.getPrenom());
 			preparedStatement.setString(4, user.getRole());
-			preparedStatement.setString(5, user.getNomCompte());
+			preparedStatement.setString(5, user.getPassword());
+			preparedStatement.setString(6, user.getNomCompte());
 
 			preparedStatement.execute();
 

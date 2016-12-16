@@ -14,17 +14,19 @@ public class User implements IDomainObject{
 	private String nom;
 	private String prenom;
 	private String role;
+	private String password;
 	private ArrayList<Hobby> hobbies;
 	private ArrayList<User> friends;
 	List<Observateur> obs;
 	
 
-	public User(String nomCompte,String mail, String nom, String prenom, String role, ArrayList<Hobby> hobbies, ArrayList<User> friends){
+	public User(String nomCompte,String mail, String password, String nom, String prenom, String role, ArrayList<Hobby> hobbies, ArrayList<User> friends){
 		this.nomCompte=nomCompte;
 		this.mail = mail;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.role=role;
+		this.password=password;
 		this.hobbies = hobbies;
 		this.friends = friends;
 		this.obs = new ArrayList<Observateur>();
@@ -74,6 +76,15 @@ public class User implements IDomainObject{
 	}
 	public void setRole(String role) {
 		this.role = role;
+		notifier();
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 		notifier();
 	}
 

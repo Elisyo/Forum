@@ -98,11 +98,11 @@ public class AdminPanel extends JPanel implements ListSelectionListener {
 				String fn = firstnameT.getText();
 				if(nameA!=null && ma!=null && pwd!=null && cpwd!=null && ln!=null && fn!=null && pwd.equals(cpwd)){
 					System.out.println(LogAction.getInstance().inscription(nameA,ma,pwd,cpwd,ln,fn));
-					nameAccountT.setText("");mailT.setText("");passwordT.setText("");
-					cPasswordT.setText("");lastnameT.setText("");firstnameT.setText("");
 					adminPanel.remove(manageUser);
 					manageUser = manageUser();
 					adminPanel.add(manageUser);
+					nameAccountT.setText("");mailT.setText("");passwordT.setText("");
+					cPasswordT.setText("");lastnameT.setText("");firstnameT.setText("");
 					adminPanel.repaint();
 					adminPanel.revalidate();
 				}
@@ -154,8 +154,8 @@ public class AdminPanel extends JPanel implements ListSelectionListener {
 		JLabel firstname = new JLabel("prenom");
 
 		final JTextField mailT = new JTextField(userSelected.getMail());
-		final JTextField passwordT = new JTextField();
-		final JTextField cPasswordT = new JTextField();
+		final JTextField passwordT = new JTextField(userSelected.getPassword());
+		final JTextField cPasswordT = new JTextField(userSelected.getPassword());
 		final JTextField lastnameT = new JTextField(userSelected.getNom());
 		final JTextField firstnameT = new JTextField(userSelected.getPrenom());
 		
@@ -176,9 +176,11 @@ public class AdminPanel extends JPanel implements ListSelectionListener {
 				System.out.println("Modifier un user");
 				if(mailT.getText()!=null && passwordT.getText()!=null && cPasswordT.getText()!=null
 						 && passwordT.getText().equals(cPasswordT.getText()) && 
-						 lastnameT.getText()!=null && firstnameT.getText()!=null){
-					
-					// ne marche pas
+						 lastnameT.getText()!=null && firstnameT.getText()!=null){					
+					userSelected.setPrenom(firstnameT.getText());
+					userSelected.setNom(lastnameT.getText());
+					userSelected.setMail(mailT.getText());
+					userSelected.setPassword(passwordT.getText());
 					UnitOfWork.getInstance().commit();
 					
 					mailT.setText("");
