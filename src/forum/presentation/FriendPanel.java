@@ -26,6 +26,7 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 	JPanel ManageFriends = new JPanel();
 	JPanel Friends = new JPanel();
 	JPanel OtherUsers = new JPanel();
+	JPanel Notif = new JPanel();
 	
 	ArrayList<User> friendsList = new ArrayList<User>();
 	JList<User> friends = new JList<User>();
@@ -34,6 +35,10 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 	ArrayList<User> usersList = new ArrayList<User>();
 	JList<User> users = new JList<User>();
 	DefaultListModel<User> l2model = new DefaultListModel<User>();
+	
+	ArrayList<User> friendNotif = new ArrayList<User>();
+	JList<User> JfriendNotif = new JList<User>();
+	DefaultListModel<User> l3model = new DefaultListModel<User>();
 	
 	FriendPanel(User u) throws SQLException{
 		this.u=u;
@@ -44,7 +49,8 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 		this.setLayout(gl);
 		ManageFriends = manageFriends();
 		this.add(ManageFriends);
-		this.add(notif());
+		Notif = notif();
+		this.add(Notif);
 	}
 	
 	private void lmodel(){
