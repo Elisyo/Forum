@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import forum.action.LogAction;
 import forum.action.UserAction;
 import forum.bean.data.User;
 
