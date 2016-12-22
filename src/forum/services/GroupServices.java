@@ -14,7 +14,8 @@ public class GroupServices implements IGroupServices{
 	
 	private static GroupServices INSTANCE = null;
 	final IGroupDAO groupDAO = (IGroupDAO) MyFactory.getInstance(IGroupDAO.class);
-
+	final INotificationServices notificationServices = (INotificationServices) MyFactory.getInstance(INotificationServices.class);
+	
 	private GroupServices() {
 	}
 
@@ -118,10 +119,11 @@ public class GroupServices implements IGroupServices{
 		groupDAO.removeAllMessageOfGroupe(groupe);
 	}
 
-	public void sendMessageGroup(Message message, Groupe groupe) {
+	public void sendMessageGroup(Message message, Groupe groupe) throws SQLException {
 		if (message.isCrypt()){
 			message.setContenue(encrypt(message.getContenue()));
 			groupDAO.sendMessageGroup(message, groupe);
+			notificationServices.sendMessageNotification(groupe);
 		}
 		else{
 			groupDAO.sendMessageGroup(message, groupe);

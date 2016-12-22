@@ -13,6 +13,7 @@ public class UserServices implements IUserServices{
 	
 	private static UserServices INSTANCE = null;
 	final IUserDAO userDAO = (IUserDAO) MyFactory.getInstance(IUserDAO.class);
+	final INotificationServices notificationServices = (INotificationServices) MyFactory.getInstance(INotificationServices.class);
 
 	private UserServices() {
 	}
@@ -53,8 +54,9 @@ public class UserServices implements IUserServices{
 	}
 
 	
-	public void sendFriendRequest(User destinateur, User destinataire) throws SQLException {
-		userDAO.sendFriendRequest(destinateur, destinataire);
+	public void sendFriendRequest(User destinateur, User userCourant) throws SQLException {
+		userDAO.sendFriendRequest(destinateur, userCourant);
+		notificationServices.sendRequestionNotification(destinateur,userCourant);
 	}
 
 	public void acceptFriendRequest(User destinateur, User userCourant) throws SQLException {

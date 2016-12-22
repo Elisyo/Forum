@@ -200,7 +200,11 @@ public class MessagePanel extends JPanel implements ItemListener, ListSelectionL
 					currentMessage = new MessageDelai(currentMessage,10);
 				}
 				
-				GroupAction.getInstance().sendMessageGroup(currentMessage, groupSelected);
+				try {
+					GroupAction.getInstance().sendMessageGroup(currentMessage, groupSelected);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+				}
 				
 				message.setText("");
 				l2model();

@@ -1,24 +1,16 @@
-import java.security.Key;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-
 import forum.action.GroupAction;
 import forum.action.HobbyAction;
-import forum.action.LogAction;
 import forum.action.UserAction;
 import forum.bean.data.Groupe;
 import forum.bean.data.Hobby;
 import forum.bean.data.Message;
 import forum.bean.data.MessageAccuse;
-import forum.bean.data.MessageChiffre;
 import forum.bean.data.MessageDelai;
 import forum.bean.data.MessageGroup;
-import forum.bean.data.MessagePrioritaire;
 import forum.bean.data.User;
-import forum.persistance.dao.UnitOfWork;
 import forum.presentation.ConnectionFrame;
 
 public class Main {
