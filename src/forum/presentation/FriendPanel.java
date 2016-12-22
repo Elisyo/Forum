@@ -16,12 +16,16 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import forum.action.GroupAction;
 import forum.action.UserAction;
+import forum.bean.data.Notification;
 import forum.bean.data.User;
 
 public class FriendPanel extends JPanel implements ListSelectionListener{
 
 	User u;
+	User userSelected = null;
+	boolean boolUserSelected = false;
 	
 	JPanel ManageFriends = new JPanel();
 	JPanel Friends = new JPanel();
@@ -36,15 +40,13 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 	JList<User> users = new JList<User>();
 	DefaultListModel<User> l2model = new DefaultListModel<User>();
 	
-	ArrayList<User> friendNotif = new ArrayList<User>();
-	JList<User> JfriendNotif = new JList<User>();
-	DefaultListModel<User> l3model = new DefaultListModel<User>();
+	ArrayList<Notification> friendNotif = new ArrayList<Notification>();
+	JList<Notification> JfriendNotif = new JList<Notification>();
+	DefaultListModel<Notification> l3model = new DefaultListModel<Notification>();
 	
 	FriendPanel(User u) throws SQLException{
 		this.u=u;
-		
-		System.out.println("test");
-		
+				
 		GridLayout gl = new GridLayout(2, 1);
 		this.setLayout(gl);
 		ManageFriends = manageFriends();
@@ -73,6 +75,19 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 			System.out.println(usersList.size());
 			for (int i = 0; i < usersList.size(); i++) {
 				l2model.addElement(usersList.get(i));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void l3model(){
+		l3model.clear();
+		try {
+			friendNotif=UserAction.getInstance();
+			System.out.println(friendNotif.size());
+			for (int i = 0; i < friendNotif.size(); i++) {
+				l3model.addElement(friendNotif.get(i));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -166,7 +181,70 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
+		int debutIndex = friends.getSelectionModel().getMinSelectionIndex();
+		int finIndex = friends.getSelectionModel().getMaxSelectionIndex();
 		
+		int debutIndexMembers = users.getSelectionModel().getMinSelectionIndex();
+		int finIndexMembers = users.getSelectionModel().getMaxSelectionIndex();
+		
+		int debutIndexAll = JfriendNotif.getSelectionModel().getMinSelectionIndex();
+		int finIndexAll = JfriendNotif.getSelectionModel().getMaxSelectionIndex();
+		
+		if(e.getValueIsAdjusting()){
+			if (!friends.getSelectionModel().isSelectionEmpty()) {
+				String hob = "";
+				for (int i = debutIndex; i <= finIndex; i++) {
+					hob += friends.getModel().getElementAt(i).getNomCompte();
+				}
+				int idGroup = Integer.parseInt(hob);
+				try {
+					userSelected = UserAction.getInstance().getUserByName(hob);
+					boolUserSelected = true;
+					lmodel();
+					l2model();
+					l3model();/*
+					usersForGroup.remove(otherUsers);
+					usersForGroup.remove(Users);
+					otherUsers=otherUsers();
+					Users = Users();
+					usersForGroup.add(Users);
+					usersForGroup.add(otherUsers);
+					usersForGroup.repaint();
+					usersForGroup.revalidate();	*/			
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				friends.getSelectionModel().clearSelection();
+			}else if(!users.getSelectionModel().isSelectionEmpty()) {
+				String hob = "";
+				for (int i = debutIndexMembers; i <= finIndexMembers; i++) {
+					hob += users.getModel().getElementAt(i).getNomCompte();
+				}
+				try {
+					userSelected = UserAction.getInstance().getUserByName(hob);
+					boolUserSelected = false;
+					lmodel();
+					l2model();
+					l3model();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				users.getSelectionModel().clearSelection();
+			}else if(!JfriendNotif.getSelectionModel().isSelectionEmpty()) {
+				String hob = "";
+				for (int i = debutIndexAll; i <= finIndexAll; i++) {
+					hob += JfriendNotif.getModel().getElementAt(i).getNomCompte();
+				}
+				try {
+					userSelected = UserAction.getInstance().getUserByName(hob);
+					lmodel();
+					l2model();
+					l3model();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				JfriendNotif.getSelectionModel().clearSelection();
+			}
+		}
 	}
 }
