@@ -125,18 +125,20 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 			JButton delete = new JButton("Supprimer");
 			delete.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("Supprimer un ami");
-					lmodel();
-					l2model();
-					l3model();
-					JFriendPanel.remove(ManageFriends);
-					JFriendPanel.remove(Notif);
-					ManageFriends = manageFriends();
-					Notif = notif();
-					JFriendPanel.add(ManageFriends);
-					JFriendPanel.add(Notif);
-					JFriendPanel.repaint();
-					JFriendPanel.revalidate();
+					if(boolUserSelected==true && userSelected!=null){
+						System.out.println("Supprimer un ami");
+						lmodel();
+						l2model();
+						l3model();
+						JFriendPanel.remove(ManageFriends);
+						JFriendPanel.remove(Notif);
+						ManageFriends = manageFriends();
+						Notif = notif();
+						JFriendPanel.add(ManageFriends);
+						JFriendPanel.add(Notif);
+						JFriendPanel.repaint();
+						JFriendPanel.revalidate();
+					}
 				}
 			});
 			
@@ -167,22 +169,24 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 			JButton add = new JButton("Ajouter");
 			add.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("Ajouter un ami");
-					try {
-						UserAction.getInstance().sendFriendRequest(userSelected);
-						lmodel();
-						l2model();
-						l3model();
-						JFriendPanel.remove(ManageFriends);
-						JFriendPanel.remove(Notif);
-						ManageFriends = manageFriends();
-						Notif = notif();
-						JFriendPanel.add(ManageFriends);
-						JFriendPanel.add(Notif);
-						JFriendPanel.repaint();
-						JFriendPanel.revalidate();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
+					if(boolUserSelected==true && userSelected!=null){
+						System.out.println("Ajouter un ami");
+						try {
+							UserAction.getInstance().sendFriendRequest(userSelected);
+							lmodel();
+							l2model();
+							l3model();
+							JFriendPanel.remove(ManageFriends);
+							JFriendPanel.remove(Notif);
+							ManageFriends = manageFriends();
+							Notif = notif();
+							JFriendPanel.add(ManageFriends);
+							JFriendPanel.add(Notif);
+							JFriendPanel.repaint();
+							JFriendPanel.revalidate();
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			});
@@ -297,7 +301,7 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				friends.getSelectionModel().clearSelection();
+				//friends.getSelectionModel().clearSelection();
 			}else if(!users.getSelectionModel().isSelectionEmpty()) {
 				String hob = "";
 				for (int i = debutIndexMembers; i <= finIndexMembers; i++) {
@@ -320,7 +324,7 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				users.getSelectionModel().clearSelection();
+				//users.getSelectionModel().clearSelection();
 			}else if(!JfriendNotif.getSelectionModel().isSelectionEmpty()) {
 				String hob = "";
 				for (int i = debutIndexAll; i <= finIndexAll; i++) {
@@ -344,7 +348,7 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 				JFriendPanel.add(Notif);
 				JFriendPanel.repaint();
 				JFriendPanel.revalidate();
-				JfriendNotif.getSelectionModel().clearSelection();
+				//JfriendNotif.getSelectionModel().clearSelection();
 			}
 		}
 	}
