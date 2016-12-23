@@ -9,6 +9,17 @@ import forum.utils.MyFactory;
 
 public class NotificationAction {
 	
+	private static NotificationAction INSTANCE = null;
+
+	private NotificationAction() {
+	}
+
+	public synchronized static NotificationAction getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new NotificationAction();
+		return INSTANCE;
+	}
+	
 	final INotificationServices notificationServices = (INotificationServices) MyFactory.getInstance(INotificationServices.class);
 
 	private static NotificationAction INSTANCE = null;
