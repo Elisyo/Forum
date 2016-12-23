@@ -3,6 +3,8 @@ package forum.services;
 import java.sql.SQLException;
 
 import forum.bean.data.Groupe;
+import forum.bean.data.MessageNotification;
+import forum.bean.data.RequestNotification;
 import forum.bean.data.User;
 import forum.persistance.dao.IHobbyDAO;
 import forum.persistance.dao.INotificationDAO;
@@ -32,6 +34,16 @@ public class NotificationServices implements INotificationServices{
 	@Override
 	public void sendRequestionNotification(User destinateur, User userCourant) throws SQLException {
 		notificationDAO.sendRequestionNotification(destinateur,userCourant);
+	}
+
+	@Override
+	public MessageNotification getMessageNotificationByid(int id) throws SQLException {
+		return notificationDAO.getMessageNotificationByid(id);
+	}
+
+	@Override
+	public RequestNotification getRequestNotificationByid(int id) throws SQLException {
+		return notificationDAO.getRequestNotificationByid(id);
 	}
 
 }

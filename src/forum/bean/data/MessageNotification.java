@@ -11,6 +11,7 @@ public class MessageNotification extends Notification{
 		this.groupe = groupe;
 	}
 
+
 	public Groupe getGroupe() {
 		return groupe;
 	}

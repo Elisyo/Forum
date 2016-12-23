@@ -9,9 +9,12 @@ import java.util.HashMap;
 
 import forum.action.LogAction;
 import forum.bean.data.Groupe;
+import forum.bean.data.MessageNotification;
 import forum.bean.data.Notification;
+import forum.bean.data.RequestNotification;
 import forum.bean.data.User;
 import forum.services.MaConnection;
+import forum.virtualProxy.GroupeProxy;
 import forum.virtualProxy.ListeUserOfGroupProxy;
 import forum.virtualProxy.UserProxy;
 
@@ -102,6 +105,75 @@ public class NotificationDAO implements INotificationDAO{
 		} finally {
 			preparedStatement2.close();
 		}
+	}
+
+	@Override
+	public MessageNotification getMessageNotificationByid(int id) throws SQLException {
+		MessageNotification notification = null;
+
+		PreparedStatement preparedStatement = null;
+		final String requete = "select * from `notification` where id = ?";
+		try {
+			preparedStatement = con.prepareStatement(requete);
+			
+			preparedStatement.setInt(1, id);
+
+			ResultSet resultat = preparedStatement.executeQuery();
+
+			
+			
+			while (resultat.next()) {	
+				UserProxy envoyeur = new UserProxy(resultat.getString(2));
+				UserProxy receveur = new UserProxy(resultat.getString(3));
+				GroupeProxy groupe = new GroupeProxy(resultat.getInt(5));
+				notification = new MessageNotification(resultat.getInt(1), envoyeur, receveur, groupe);					
+			}
+		} catch (final SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (final SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			preparedStatement.close();
+		}
+
+		return notification;
+	}
+
+	@Override
+	public RequestNotification getRequestNotificationByid(int id) throws SQLException {
+		RequestNotification notification = null;
+
+		PreparedStatement preparedStatement = null;
+		final String requete = "select * from `notification` where id = ?";
+		try {
+			preparedStatement = con.prepareStatement(requete);
+			
+			preparedStatement.setInt(1, id);
+
+			ResultSet resultat = preparedStatement.executeQuery();
+
+			
+			
+			while (resultat.next()) {	
+				UserProxy envoyeur = new UserProxy(resultat.getString(2));
+				UserProxy receveur = new UserProxy(resultat.getString(3));
+				notification = new RequestNotification(resultat.getInt(1), envoyeur, receveur);				
+			}
+		} catch (final SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (final SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			preparedStatement.close();
+		}
+
+		return notification;
 	}
 
 	
