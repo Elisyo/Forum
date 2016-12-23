@@ -40,7 +40,7 @@ public interface IGroupServices {
 	
 	public void removeMessageUserOfGroup(User user, Groupe groupe) throws SQLException;
 
-	public void sendMessageGroup(Message message, Groupe groupe) throws SQLException;
+	public void sendMessageGroup(MessageGroup message) throws SQLException;
 
 	public ArrayList<User> getFreeUserForGroup(Groupe groupe) throws SQLException;
 

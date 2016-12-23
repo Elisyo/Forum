@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import forum.bean.data.Groupe;
 import forum.bean.data.Hobby;
+import forum.bean.data.MessageNotification;
+import forum.bean.data.RequestNotification;
 import forum.bean.data.User;
 import forum.persistance.dao.IUserDAO;
 import forum.utils.MyFactory;
@@ -85,6 +87,20 @@ public class UserServices implements IUserServices{
 
 	public void removeHobby(Hobby hobby) throws SQLException {
 		userDAO.removeHobby(hobby);
+	}
+
+	@Override
+	public ArrayList<RequestNotification> getRequestNotification() {
+		ArrayList<RequestNotification> listRequestNotification = new ArrayList<RequestNotification>();
+		listRequestNotification = userDAO.getRequestNotification();
+		return listRequestNotification;
+	}
+
+	@Override
+	public ArrayList<MessageNotification> getMessageNotification() {
+		ArrayList<MessageNotification> listMessageNotification = new ArrayList<MessageNotification>();
+		listMessageNotification = userDAO.getMessageNotification();
+		return listMessageNotification;
 	}
 
 

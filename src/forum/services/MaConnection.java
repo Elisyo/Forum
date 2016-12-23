@@ -21,8 +21,11 @@ public class MaConnection {
 	public Connection getConnection() {
 		Connection connexion = null;
 		try {
+			//String url = "jdbc:mysql://localhost:8888/deleplanque";
 			String url = "jdbc:mysql://webtp.fil.univ-lille1.fr/deleplanque";
-			connexion = DriverManager.getConnection(url, "deleplanque", "vermelles0312");
+			String username = "deleplanque";
+			String mdp = "vermelles0312";
+			connexion = DriverManager.getConnection(url, username, mdp);
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Can't join the database.");
 			System.exit(0);

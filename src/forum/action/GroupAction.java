@@ -111,8 +111,8 @@ public class GroupAction {
 		return listMessage;
 	}
 	
-	public void sendMessageGroup(Message message, Groupe groupe) throws SQLException{
-		groupServices.sendMessageGroup(message, groupe);
+	public void sendMessageGroup(MessageGroup message) throws SQLException{
+		groupServices.sendMessageGroup(message);
 	}
 	
 	

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import forum.bean.data.Groupe;
 import forum.bean.data.Hobby;
+import forum.bean.data.MessageNotification;
+import forum.bean.data.RequestNotification;
 import forum.bean.data.User;
 
 public interface IUserDAO {
@@ -32,5 +34,9 @@ public interface IUserDAO {
 	public void addHobby(Hobby hobby) throws SQLException;
 
 	public void removeHobby(Hobby hobby) throws SQLException;
+
+	public ArrayList<RequestNotification> getRequestNotification();
+
+	public ArrayList<MessageNotification> getMessageNotification();
 
 }

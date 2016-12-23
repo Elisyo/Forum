@@ -14,6 +14,8 @@ import forum.action.LogAction;
 import forum.bean.data.Groupe;
 import forum.bean.data.Hobby;
 import forum.bean.data.MessageGroup;
+import forum.bean.data.MessageNotification;
+import forum.bean.data.RequestNotification;
 import forum.bean.data.User;
 import forum.services.MaConnection;
 import forum.virtualProxy.GroupeProxy;
@@ -40,7 +42,7 @@ public class UserDAO implements IUserDAO {
 	}
 
 	public void removeUser(User user) throws SQLException {
-		
+
 		PreparedStatement preparedStatement = null;
 		final String requete = "DELETE FROM `user` WHERE `nameAccount` = ?";
 		try {
@@ -50,7 +52,6 @@ public class UserDAO implements IUserDAO {
 
 			preparedStatement.executeUpdate();
 
-			
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			try {
@@ -61,7 +62,7 @@ public class UserDAO implements IUserDAO {
 		} finally {
 			preparedStatement.close();
 		}
-				
+
 	}
 
 	public ArrayList<Groupe> getListGroupOfUser(User user) throws SQLException {
@@ -77,10 +78,10 @@ public class UserDAO implements IUserDAO {
 			ResultSet resultat = preparedStatement.executeQuery();
 
 			while (resultat.next()) {
-				
-				GroupeProxy groupeProxy= new GroupeProxy(resultat.getInt(2));
+
+				GroupeProxy groupeProxy = new GroupeProxy(resultat.getInt(2));
 				listGroups.add(groupeProxy);
-			
+
 			}
 		} catch (final SQLException e) {
 			e.printStackTrace();
@@ -95,8 +96,6 @@ public class UserDAO implements IUserDAO {
 
 		return listGroups;
 	}
-
-
 
 	public User findUserByNameAccount(String name) throws SQLException {
 		if (users.containsKey(name) && users.get(name).get() == null) {
@@ -121,9 +120,11 @@ public class UserDAO implements IUserDAO {
 				ResultSet resultat = preparedStatement.executeQuery();
 
 				while (resultat.next()) {
-					ListeFriendsOfUserProxy listFriends = new ListeFriendsOfUserProxy(name); 
+					ListeFriendsOfUserProxy listFriends = new ListeFriendsOfUserProxy(name);
 					ListeHobbiesOfUserProxy listHobbies = new ListeHobbiesOfUserProxy(name);
-					user = new User(resultat.getString(1), resultat.getString(2), resultat.getString(3), resultat.getString(4), resultat.getString(5),resultat.getString(6), listHobbies, listFriends);
+					user = new User(resultat.getString(1), resultat.getString(2), resultat.getString(3),
+							resultat.getString(4), resultat.getString(5), resultat.getString(6), listHobbies,
+							listFriends);
 					user.add(UnitOfWork.getInstance());
 				}
 			} catch (final SQLException e) {
@@ -157,11 +158,11 @@ public class UserDAO implements IUserDAO {
 			ResultSet resultat = preparedStatement.executeQuery();
 
 			while (resultat.next()) {
-				
+
 				UserProxy userProxy = new UserProxy(resultat.getString(1));
 				userProxy.add(UnitOfWork.getInstance());
 				listFriends.add(userProxy);
-			
+
 			}
 		} catch (final SQLException e) {
 			e.printStackTrace();
@@ -190,10 +191,10 @@ public class UserDAO implements IUserDAO {
 			ResultSet resultat = preparedStatement.executeQuery();
 
 			while (resultat.next()) {
-				
+
 				HobbyProxy hobbyProxy = new HobbyProxy(resultat.getInt(2));
 				listHobbies.add(hobbyProxy);
-			
+
 			}
 		} catch (final SQLException e) {
 			e.printStackTrace();
@@ -214,14 +215,12 @@ public class UserDAO implements IUserDAO {
 		return null;
 	}
 
-	
-	public void updateUser(User user) throws SQLException{
+	public void updateUser(User user) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		final String requete = "UPDATE `deleplanque`.`user` SET `mail` = ?, `lastname` = ?, `firstname` = ?, `role` = ?, `password` = ? WHERE `user`.`nameAccount` = ?";
 		try {
 			preparedStatement = con.prepareStatement(requete);
 
-			
 			preparedStatement.setString(1, user.getMail());
 			preparedStatement.setString(2, user.getNom());
 			preparedStatement.setString(3, user.getPrenom());
@@ -242,7 +241,7 @@ public class UserDAO implements IUserDAO {
 			preparedStatement.close();
 		}
 	}
-	
+
 	public void update(User user) throws SQLException {
 		getInstance().updateUser(user);
 		System.out.println("Données mise à jour !");
@@ -259,7 +258,6 @@ public class UserDAO implements IUserDAO {
 
 			preparedStatement.executeUpdate();
 
-			
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			try {
@@ -269,8 +267,8 @@ public class UserDAO implements IUserDAO {
 			}
 		} finally {
 			preparedStatement.close();
-		}		
-		
+		}
+
 	}
 
 	public void acceptFriendRequest(User destinateur, User userCourant) throws SQLException {
@@ -290,15 +288,14 @@ public class UserDAO implements IUserDAO {
 
 			preparedStatement2.setString(2, destinateur.getNomCompte());
 			preparedStatement2.setString(1, userCourant.getNomCompte());
-			
+
 			preparedStatement3.setString(1, destinateur.getNomCompte());
 			preparedStatement3.setString(2, userCourant.getNomCompte());
-			
+
 			preparedStatement.executeUpdate();
 			preparedStatement2.executeUpdate();
 			preparedStatement3.executeUpdate();
 
-			
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			try {
@@ -310,22 +307,21 @@ public class UserDAO implements IUserDAO {
 			preparedStatement.close();
 			preparedStatement2.close();
 			preparedStatement3.close();
-		}		
-				
+		}
+
 	}
 
 	public void declineFriendRequest(User destinateur, User userCourant) throws SQLException {
 		PreparedStatement preparedStatement3 = null;
 		final String requete3 = "DELETE FROM `friendsrequest` WHERE `destinateur` = ? and `destinataire` = ?";
-		try {		
+		try {
 			preparedStatement3 = con.prepareStatement(requete3);
 
 			preparedStatement3.setString(1, destinateur.getNomCompte());
 			preparedStatement3.setString(2, userCourant.getNomCompte());
-	
+
 			preparedStatement3.executeUpdate();
 
-			
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			try {
@@ -335,13 +331,13 @@ public class UserDAO implements IUserDAO {
 			}
 		} finally {
 			preparedStatement3.close();
-		}		
-		
+		}
+
 	}
 
 	public ArrayList<User> getAllUser() {
 		ArrayList<User> listUser = new ArrayList<User>();
-		Statement stmt = null; 
+		Statement stmt = null;
 		String requete = "select * from user";
 		try {
 
@@ -366,8 +362,11 @@ public class UserDAO implements IUserDAO {
 
 	public ArrayList<User> getOtherUser() {
 		ArrayList<User> listUser = new ArrayList<User>();
-		Statement stmt = null; 
-		String requete = "select * from user where nameAccount not in (select nameAccount from user where nameAccount = '"+LogAction.getInstance().currentUser.getNomCompte()+"') and nameAccount not in (select user2 from friend where user1 = '"+LogAction.getInstance().currentUser.getNomCompte()+"')";
+		Statement stmt = null;
+		String requete = "select * from user where nameAccount not in (select nameAccount from user where nameAccount = '"
+				+ LogAction.getInstance().currentUser.getNomCompte()
+				+ "') and nameAccount not in (select user2 from friend where user1 = '"
+				+ LogAction.getInstance().currentUser.getNomCompte() + "')";
 		try {
 
 			stmt = con.createStatement();
@@ -400,7 +399,6 @@ public class UserDAO implements IUserDAO {
 
 			preparedStatement.executeUpdate();
 
-			
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			try {
@@ -410,7 +408,7 @@ public class UserDAO implements IUserDAO {
 			}
 		} finally {
 			preparedStatement.close();
-		}				
+		}
 	}
 
 	public void removeHobby(Hobby hobby) throws SQLException {
@@ -424,7 +422,6 @@ public class UserDAO implements IUserDAO {
 
 			preparedStatement.executeUpdate();
 
-			
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			try {
@@ -435,5 +432,66 @@ public class UserDAO implements IUserDAO {
 		} finally {
 			preparedStatement.close();
 		}
+	}
+
+	@Override
+	public ArrayList<RequestNotification> getRequestNotification() {
+
+		ArrayList<RequestNotification> listRequestNotification = new ArrayList<RequestNotification>();
+		Statement stmt = null;
+		String requete = "select * from notification where nameReceveur = '"
+				+ LogAction.getInstance().currentUser.getNomCompte() + "' and type = 'request'";
+		try {
+
+			stmt = con.createStatement();
+			ResultSet resultat = stmt.executeQuery(requete);
+
+			while (resultat.next()) {
+				UserProxy envoyeur = new UserProxy(resultat.getString(2));
+				UserProxy receveur = new UserProxy(resultat.getString(3));
+				RequestNotification rn = new RequestNotification(resultat.getInt(1), envoyeur, receveur);
+				listRequestNotification.add(rn);
+			}
+		} catch (final SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (final SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		return listRequestNotification;
+	}
+
+	@Override
+	public ArrayList<MessageNotification> getMessageNotification() {
+
+		ArrayList<MessageNotification> listMessageNotification = new ArrayList<MessageNotification>();
+		Statement stmt = null;
+		String requete = "select * from notification where nameReceveur = '"
+				+ LogAction.getInstance().currentUser.getNomCompte() + "' and type = 'message'";
+		try {
+
+			stmt = con.createStatement();
+			ResultSet resultat = stmt.executeQuery(requete);
+
+			while (resultat.next()) {
+				UserProxy envoyeur = new UserProxy(resultat.getString(2));
+				UserProxy receveur = new UserProxy(resultat.getString(3));
+				GroupeProxy groupe = new GroupeProxy(resultat.getInt(5));
+				MessageNotification mn = new MessageNotification(resultat.getInt(1), envoyeur, receveur, groupe);
+				listMessageNotification.add(mn);
+			}
+		} catch (final SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (final SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		return listMessageNotification;
 	}
 }

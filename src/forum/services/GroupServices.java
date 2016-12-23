@@ -119,14 +119,15 @@ public class GroupServices implements IGroupServices{
 		groupDAO.removeAllMessageOfGroupe(groupe);
 	}
 
-	public void sendMessageGroup(Message message, Groupe groupe) throws SQLException {
+	public void sendMessageGroup(MessageGroup message) throws SQLException {
 		if (message.isCrypt()){
 			message.setContenue(encrypt(message.getContenue()));
-			groupDAO.sendMessageGroup(message, groupe);
-			notificationServices.sendMessageNotification(groupe);
+			groupDAO.sendMessageGroup(message);
+			notificationServices.sendMessageNotification(message.getGroupe());
 		}
 		else{
-			groupDAO.sendMessageGroup(message, groupe);
+			groupDAO.sendMessageGroup(message);
+			notificationServices.sendMessageNotification(message.getGroupe());
 		}
 	}
 

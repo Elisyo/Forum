@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import forum.action.LogAction;
 import forum.bean.data.Groupe;
 import forum.bean.data.Hobby;
+import forum.bean.data.MessageNotification;
+import forum.bean.data.Notification;
+import forum.bean.data.RequestNotification;
 import forum.bean.data.User;
 import forum.services.IUserServices;
 import forum.utils.MyFactory;
@@ -58,7 +61,7 @@ public class UserAction {
 	}
 	
 	public void sendFriendRequest(User destinataire) throws SQLException{
-		userServices.sendFriendRequest(LogAction.getInstance().currentUser,destinataire);
+		userServices.sendFriendRequest(destinataire,LogAction.getInstance().currentUser);
 	}
 	
 	public void acceptFriendRequest(User destinateur) throws SQLException{
@@ -87,5 +90,17 @@ public class UserAction {
 	
 	public void removeHobby(Hobby hobby) throws SQLException{
 		userServices.removeHobby(hobby);
+	}
+
+	public ArrayList<RequestNotification> getRequestNotification() {
+		ArrayList<RequestNotification> listRequestNotification = new ArrayList<RequestNotification>();
+		listRequestNotification = userServices.getRequestNotification();
+		return listRequestNotification;
+	}
+	
+	public ArrayList<MessageNotification> getMessageNotification() {
+		ArrayList<MessageNotification> listMessageNotification = new ArrayList<MessageNotification>();
+		listMessageNotification = userServices.getMessageNotification();
+		return listMessageNotification;
 	}
 }

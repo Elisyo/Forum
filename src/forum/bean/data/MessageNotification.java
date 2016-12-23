@@ -3,20 +3,20 @@ package forum.bean.data;
 public class MessageNotification extends Notification{
 	
 	private String type;
-	private int idGroupe;
+	private Groupe groupe;
 	
-	public MessageNotification(int id, User envoyeur, User receveur, int idGroupe) {
+	public MessageNotification(int id, User envoyeur, User receveur, Groupe groupe) {
 		super(id, envoyeur, receveur);
 		this.type = "message";
-		this.idGroupe = idGroupe;
+		this.groupe = groupe;
 	}
 
-	public int getIdGroupe() {
-		return idGroupe;
+	public Groupe getGroupe() {
+		return groupe;
 	}
 
-	public void setIdGroupe(int idGroupe) {
-		this.idGroupe = idGroupe;
+	public void setIdGroupe(Groupe groupe) {
+		this.groupe = groupe;
 	}
 
 	public String getType() {

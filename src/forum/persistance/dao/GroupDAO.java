@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import forum.action.LogAction;
 import forum.bean.data.Groupe;
 import forum.bean.data.Message;
 import forum.bean.data.MessageGroup;
@@ -479,8 +480,27 @@ public class GroupDAO implements IGroupDAO{
 		
 	}
 
-	public void sendMessageGroup(Message message, Groupe groupe) {
-		System.out.println(message.getContenue());
+	public void sendMessageGroup(MessageGroup message) throws SQLException {
+		PreparedStatement preparedStatement = null;
+		final String requete = "INSERT INTO `deleplanque`.`message` (`id`, `idGroupe`, `destinataire`, `contenue`, `dateCreation`, `delais`, `iswithaccuse`, `isprioritaire`, `iscrypte`, `state`) VALUES (NULL, ?, ?, ?, '2016-12-23', '0', '0', '0', '0', 'non lu')";
+		try {
+			preparedStatement = con.prepareStatement(requete);
+
+			preparedStatement.setInt(1, message.getGroupe().getIdGroupe());
+			preparedStatement.setString(2, LogAction.getInstance().currentUser.getNomCompte());
+			preparedStatement.setString(3, message.getContenue());
+			
+			preparedStatement.executeUpdate();
+		} catch (final SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (final SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			preparedStatement.close();
+		}
 	}
 
 	public ArrayList<User> getFreeUserForGroup(Groupe groupe) throws SQLException {

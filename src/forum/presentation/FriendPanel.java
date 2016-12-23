@@ -16,13 +16,17 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import forum.action.LogAction;
+import forum.action.GroupAction;
 import forum.action.UserAction;
+import forum.bean.data.Notification;
+import forum.bean.data.RequestNotification;
 import forum.bean.data.User;
 
 public class FriendPanel extends JPanel implements ListSelectionListener{
 
 	User u;
+	User userSelected = null;
+	boolean boolUserSelected = false;
 	
 	JPanel ManageFriends = new JPanel();
 	JPanel Friends = new JPanel();
@@ -37,15 +41,13 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 	JList<User> users = new JList<User>();
 	DefaultListModel<User> l2model = new DefaultListModel<User>();
 	
-	ArrayList<User> friendNotif = new ArrayList<User>();
-	JList<User> JfriendNotif = new JList<User>();
-	DefaultListModel<User> l3model = new DefaultListModel<User>();
+	ArrayList<RequestNotification> friendNotif = new ArrayList<RequestNotification>();
+	JList<Notification> JfriendNotif = new JList<Notification>();
+	DefaultListModel<Notification> l3model = new DefaultListModel<Notification>();
 	
 	FriendPanel(User u) throws SQLException{
 		this.u=u;
-		
-		System.out.println("test");
-		
+				
 		GridLayout gl = new GridLayout(2, 1);
 		this.setLayout(gl);
 		ManageFriends = manageFriends();
@@ -77,6 +79,15 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void l3model(){
+		l3model.clear();
+		friendNotif=UserAction.getInstance().getRequestNotification();
+		System.out.println(friendNotif.size());
+		for (int i = 0; i < friendNotif.size(); i++) {
+			l3model.addElement(friendNotif.get(i));
 		}
 	}
 	
@@ -145,7 +156,12 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 			add.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("Ajouter un ami");
-					// refresh les listes
+					try {
+						UserAction.getInstance().sendFriendRequest(userSelected);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			
@@ -167,7 +183,70 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
+		int debutIndex = friends.getSelectionModel().getMinSelectionIndex();
+		int finIndex = friends.getSelectionModel().getMaxSelectionIndex();
 		
+		int debutIndexMembers = users.getSelectionModel().getMinSelectionIndex();
+		int finIndexMembers = users.getSelectionModel().getMaxSelectionIndex();
+		
+		int debutIndexAll = JfriendNotif.getSelectionModel().getMinSelectionIndex();
+		int finIndexAll = JfriendNotif.getSelectionModel().getMaxSelectionIndex();
+		
+		if(e.getValueIsAdjusting()){
+			if (!friends.getSelectionModel().isSelectionEmpty()) {
+				String hob = "";
+				for (int i = debutIndex; i <= finIndex; i++) {
+					hob += friends.getModel().getElementAt(i).getNomCompte();
+				}
+				int idGroup = Integer.parseInt(hob);
+				try {
+					userSelected = UserAction.getInstance().getUserByName(hob);
+					boolUserSelected = true;
+					lmodel();
+					l2model();
+					l3model();/*
+					usersForGroup.remove(otherUsers);
+					usersForGroup.remove(Users);
+					otherUsers=otherUsers();
+					Users = Users();
+					usersForGroup.add(Users);
+					usersForGroup.add(otherUsers);
+					usersForGroup.repaint();
+					usersForGroup.revalidate();	*/			
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				friends.getSelectionModel().clearSelection();
+			}else if(!users.getSelectionModel().isSelectionEmpty()) {
+				String hob = "";
+				for (int i = debutIndexMembers; i <= finIndexMembers; i++) {
+					hob += users.getModel().getElementAt(i).getNomCompte();
+				}
+				try {
+					userSelected = UserAction.getInstance().getUserByName(hob);
+					boolUserSelected = false;
+					lmodel();
+					l2model();
+					l3model();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				users.getSelectionModel().clearSelection();
+			}else if(!JfriendNotif.getSelectionModel().isSelectionEmpty()) {
+				String hob = "";
+				for (int i = debutIndexAll; i <= finIndexAll; i++) {
+					hob += JfriendNotif.getModel().getElementAt(i).getEnvoyeur();
+				}
+				try {
+					userSelected = UserAction.getInstance().getUserByName(hob);
+					lmodel();
+					l2model();
+					l3model();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				JfriendNotif.getSelectionModel().clearSelection();
+			}
+		}
 	}
 }
