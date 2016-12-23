@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import forum.action.NotificationAction;
 import forum.action.UserAction;
 import forum.bean.data.RequestNotification;
 import forum.bean.data.User;
@@ -325,7 +326,13 @@ public class FriendPanel extends JPanel implements ListSelectionListener{
 				for (int i = debutIndexAll; i <= finIndexAll; i++) {
 					hob += JfriendNotif.getModel().getElementAt(i).getId();
 				}
-				requestSelected = UserAction.getInstance().getRequestNotification().get(1);
+				int idRequest = Integer.parseInt(hob);
+				try {
+					requestSelected = NotificationAction.getInstance().getRequestNotificationByid(idRequest);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				lmodel();
 				l2model();
 				l3model();

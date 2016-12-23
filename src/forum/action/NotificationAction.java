@@ -11,6 +11,8 @@ public class NotificationAction {
 	
 	final INotificationServices notificationServices = (INotificationServices) MyFactory.getInstance(INotificationServices.class);
 
+	private static NotificationAction INSTANCE = null;
+	
 	public MessageNotification getMessageNotificationByid(int id) throws SQLException{
 		MessageNotification mn = notificationServices.getMessageNotificationByid(id);
 		return mn;
@@ -19,5 +21,10 @@ public class NotificationAction {
 	public RequestNotification getRequestNotificationByid(int id) throws SQLException{
 		RequestNotification rn = notificationServices.getRequestNotificationByid(id);
 		return rn;
+	}
+	public synchronized static NotificationAction getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new NotificationAction();
+		return INSTANCE;
 	}
 }
